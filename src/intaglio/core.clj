@@ -53,7 +53,7 @@
 
 (post-html {:file "posts/entry-9.md"})
 
-(pprint (conj (post-html {:file "posts/entry-9.md"}) (post-html {:file "posts/entry-9.md"})))
+(make-nodes {:file "posts/entry-9.md"})
 
 (def p-col (partition-all (@config-atom :per-page)
                        (reverse (sort-by :entry-num (parse-string (slurp "posts.json") true)))))
@@ -64,17 +64,18 @@
   []
    [:id#master] (html/content ()))
 
-(pprint (conj (post-snippet (md/md-to-html-string (slurp "posts/entry-41.md"))) (post-snippet (md/md-to-html-string (slurp "posts/entry-41.md")))))
+(pprint (conj (post-snippet (md/md-to-html-string (slurp "posts/entry-41.md")))
+              (post-snippet (md/md-to-html-string (slurp "posts/entry-41.md")))))
 
+(defn make-nodes [{{file :file} :entry}]
+            (post-snippet (md/md-to-html-string (slurp file))))
+            
 (html/defsnippet post-snippet "templates/post.html"
   [:div.row]
   [post]
   [:div] (html/content (html-enlive post)))
 
-(gather-posts [(gather-posts [(gather-posts [(gather-posts [(gather-posts [(gather-posts [(gather-posts [(gather-posts [(gather-posts [
-  
-(defn make-page [page-num posts-map]
-  (main-template page-num
+(make-nodes (ffirst  p-col)) 
 
 (defn html-enlive 
   [html-string]
